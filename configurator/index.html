@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Snakeskin Configurator</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<link rel="stylesheet" href="style.css?v=14" />
+</head>
+<body>
+<header>
+  <h1>Snakeskin Configurator</h1>
+  <div class="actions">
+    <label class="btn">
+      Load SVG
+      <input type="file" id="svg-input" accept=".svg,image/svg+xml" hidden />
+    </label>
+    <select id="preset-svg" title="Preset outlines">
+      <option value="">Preset outline…</option>
+    </select>
+    <label class="btn">
+      Load config JSON
+      <input type="file" id="config-input" accept="application/json,.json" hidden />
+    </label>
+    <select id="preset-config" title="Preset configs">
+      <option value="">Preset config…</option>
+    </select>
+    <button id="reset-btn" type="button">Reset to defaults</button>
+    <button id="download-btn" type="button" class="primary">Download config.json</button>
+  </div>
+</header>
+
+<main>
+  <section class="canvas-pane">
+    <div class="canvas-wrap">
+      <svg id="canvas" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+        <g id="view"><!-- transformed group: y-flip + center -->
+          <g id="unibody-layer"></g>
+          <path id="outline" class="outline" d="" />
+          <path id="outline-offset" class="outline-offset" d="" />
+          <g id="lip-arc-layer"></g>
+          <g id="magnet-layer"></g>
+          <g id="cutout-layer"></g>
+          <g id="handle-layer"></g>
+          <circle id="centroid" class="centroid" r="1.2" />
+          <line id="x-axis" class="axis" />
+          <line id="y-axis" class="axis" />
+        </g>
+      </svg>
+      <div id="canvas-empty" class="empty">Load an SVG outline to begin.</div>
+    </div>
+    <div class="legend">
+      <span class="key outline-key"></span> outline
+      <span class="key offset-key"></span> wall offset
+      <span class="key cutout-key"></span> cutout
+      <span class="key magnet-key"></span> magnet
+      <span class="key lip-key"></span> lip range
+      <span class="key tray-key"></span> tray
+      <span class="status" id="status"></span>
+    </div>
+  </section>
+
+  <section class="form-pane">
+    <div id="form"></div>
+  </section>
+</main>
+
+<script src="app.js?v=14" type="module"></script>
+</body>
+</html>

@@ -231,6 +231,31 @@ PCB. The velcro holds it in place. Feel free to come up with other mechanisms
 for keeping it in place, but velcro is an easy solution that doesn't require
 much force to remove. I got my velcro from an old bike helmet.
 
+### Visual configurator (browser)
+
+If editing JSON by hand sounds painful, there's a local HTML configurator that
+renders your PCB outline and lets you drag the cutout/magnet/lip positions
+around the case wall, then download the resulting `config.json`.
+
+It runs entirely in the browser, with no build step.
+
+```sh
+make configurator
+# then open http://localhost:8771/configurator/
+```
+
+(Or run `python -m http.server 8771` from the repo root yourself.)
+
+The configurator only writes the config file — it does not run the Python
+generator. Once you've downloaded `config.json`, run snakeskin as usual:
+
+```sh
+snakeskin -c config.json -o my-board path/to/edge_cuts.svg
+```
+
+The downloaded JSON contains only fields that differ from the defaults, so
+upgrading snakeskin won't drag stale values along.
+
 ### Configuration
 
 Other than the case design parameters below, you can also input the following
@@ -277,6 +302,7 @@ the Maizeless has been tested on a real print.
 | `z_space_under_pcb` | 1 mm | The size of the gap beneath the PCB, to leave room for through-hole pins, wires, hotswap sockets etc on the underside. Modify this to at least 1.85 if you are using kailh hotswap sockets under the PCB, for example. Also increase it if you want to have bigger tolerences for the fit and need more space for the walls to narrow in. By default, leaves just enough space for the pins of a choc switch directly soldered into a 1.6 mm pcb (which I measure stick out at about 0.83 mm). |
 | `wall_xy_bottom_tolerance` | -0.3 mm | Amount of space between the PCB and the case walls near the case bottom, where PCB should sit (i.e. above z_space_under_pcb). Intended as a -ve value to get a tight friction fit. This is implemented with a scaling hack because of engine limitations, so I'd encourage measuring the result in a CAD program if you need it exact. |
 | `wall_xy_top_tolerance` | 0.3 mm | Amount of space between the widest part of the walls (at the top) and the PCB outline. Adjust this depending on printer tolerances and how tight you want the friction fit. You may want to increase `z_space_under_pcb` if the difference between this and `wall_xy_bottom_tolerance` is large |
+| `chamfer_len` | 1 mm | Chamfer length on the case edges. |
 | `cutout_position` | 10 | Location along the walls of the pcb case for a cutout to remove the PCB from the board, as an angle from the center of the case. Angle is between -180 and 180, with 0 pointing in +ve X axis, and -90 pointing in the -ve Y axis. Not every angle is possible, so your argument will be mapped to the closest acceptable angle. I suggest this position also be the location of your USB connector. |
 | `cutout_width` | 15 mm | Width of the removal cutout. May cut out more if the area isn't a straight line. |
 | `additional_cutouts` | `[[10, 15]]` | List of extra cutouts in the wall to add, in the format `[[angle at center of cutout, width],]`. See `cutout_position` for info about the angles. Use this to place an extra cutout for your TRRS cable, if it's a wired board. |

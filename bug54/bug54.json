@@ -1,0 +1,13 @@
+{
+    "cutout_position": 7,
+    "additional_cutouts": [
+        [
+            40,
+            15
+        ]
+    ],
+    "unibody_mode": "tray",
+    "unibody_separation": 25,
+    "unibody_splay_angle": 13,
+    "unibody_tenting_angle": 10
+}

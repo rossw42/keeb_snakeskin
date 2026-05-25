@@ -110,6 +110,12 @@ def generate_cases(svg_file, user_params=None):
     if test_print:
         cfg.update(test_overrides)
 
+    if cfg.get("folding_case") and (cfg.get("carrycase") or cfg.get("tenting_stand")):
+        raise ValueError(
+            "folding_case is mutually exclusive with carrycase and tenting_stand. "
+            "Disable those to use folding_case."
+        )
+
     pcb_case_wall_height = cfg["z_space_under_pcb"] + cfg["wall_z_height"]
 
     base_face = import_svg_as_face(svg_file)
@@ -120,6 +126,18 @@ def generate_cases(svg_file, user_params=None):
         )
         p.parent.mkdir(parents=True, exist_ok=True)
         return str(p)
+
+    if cfg.get("folding_case"):
+        print("Generating folding case...")
+        try:
+            from folding_case import generate_folding_case
+        except ImportError:
+            from .folding_case import generate_folding_case
+        folding = generate_folding_case(
+            base_face, generate_pcb_case, pcb_case_wall_height, cfg
+        )
+        _export(folding, output_path("folding_case"), "folding case")
+        return
 
     print("Generating PCB case...")
     case = generate_pcb_case(base_face, pcb_case_wall_height)
@@ -159,6 +177,15 @@ def generate_cases(svg_file, user_params=None):
             _export(
                 mirror(flap, about=Plane.YZ), output, f"mirrored tenting flap {i+1}"
             )
+
+    if cfg.get("unibody_mode") == "tray":
+        print("Generating unibody tray...")
+        try:
+            from unibody import generate_unibody_tray
+        except ImportError:
+            from .unibody import generate_unibody_tray
+        tray = generate_unibody_tray(base_face, cfg)
+        _export(tray, output_path("unibody_tray"), "unibody tray")
 
     return
 
