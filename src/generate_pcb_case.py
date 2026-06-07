@@ -191,6 +191,15 @@ def generate_cases(svg_file, user_params=None):
             from .unibody import generate_unibody_tray
         tray = generate_unibody_tray(base_face, cfg)
         _export(tray, output_path("unibody_tray"), "unibody tray")
+    
+    elif cfg.get("unibody_mode") == "case":
+        print("Generating unibody case...")
+        try:
+            from unibody import generate_unibody_case
+        except ImportError:
+            from .unibody import generate_unibody_case
+        case = generate_unibody_case(base_face, cfg)
+        _export(case, output_path("unibody_case"), "unibody case")
 
     return
 
