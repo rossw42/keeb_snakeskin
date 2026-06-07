@@ -268,29 +268,49 @@ If editing JSON by hand sounds painful, there's a local HTML configurator that
 renders your PCB outline and lets you drag the cutout/magnet/lip positions
 around the case wall, then download the resulting `config.json`.
 
-It runs entirely in the browser, with no build step.
+It runs entirely in the browser, with no build step or server configuration needed.
 
+#### Launching the Configurator
+
+**Linux/Mac:**
 ```sh
+cd path/to/keeb_snakeskin
 make configurator
-# then open http://localhost:8771/configurator/
-```
-
-(Or run `python -m http.server 8771` from the repo root yourself.)
-
-On Windows, use:
-```powershell
+# or manually:
 python -m http.server 8771
-# then open http://localhost:8771/configurator/
 ```
 
-The configurator only writes the config file — it does not run the Python
-generator. Once you've downloaded `config.json`, run snakeskin as usual:
+Then open http://localhost:8771/configurator/ in your browser.
 
+**Windows:**
+```powershell
+cd path\to\keeb_snakeskin
+python -m http.server 8771
+```
+
+Then open http://localhost:8771/configurator/ in your browser.
+
+#### Using the Configurator
+
+1. **Load a PCB outline** — Click "Load SVG" and select your edge cuts file, or pick a preset outline
+2. **Load a config (optional)** — Click "Load config JSON" to start from an existing config, or pick a preset
+3. **Adjust parameters** — Edit the form fields on the right, or drag handles on the canvas:
+   - Drag the **cutout handle** to reposition the removal cutout
+   - Drag **magnet/lip handles** if using a carrycase
+   - Drag **additional cutout handles** for TRRS cables or other features
+4. **Download your config** — Click "Download config.json" and enter a name
+5. **Generate your case** — Use the downloaded config with snakeskin
+
+#### Generating Cases from Downloaded Config
+
+Once you've downloaded `config.json` from the configurator:
+
+Linux/Mac:
 ```sh
 snakeskin -c config.json -o my-board path/to/edge_cuts.svg
 ```
 
-On Windows with Python 3.13:
+Windows with Python 3.13:
 ```powershell
 py -3.13 -m keeb_snakeskin.snakeskin -c config.json --output_dir my-board path/to/edge_cuts.svg
 ```
