@@ -80,6 +80,37 @@ should create a new executable `snakeskin` in your python scripts folder.
 
 Use `pip install --user git+https://github.com/BlueDrink9/keeb_snakeskin.git` for the latest git version.
 
+#### Windows Installation
+
+If you're on Windows with Python 3.14+, you may encounter compatibility issues since `build123d` and its dependencies don't yet support the latest Python versions. Here's how to resolve it:
+
+1. **Use Python 3.13** (recommended):
+   ```powershell
+   # Check available Python versions
+   py -0
+   
+   # Install with Python 3.13
+   py -3.13 -m pip install --user keeb-snakeskin
+   ```
+
+2. **Run snakeskin with Python 3.13**:
+   ```powershell
+   py -3.13 -m keeb_snakeskin.snakeskin --output_dir my_case path/to/edge_cuts.svg
+   ```
+
+If you're installing from source on Windows:
+```powershell
+# Clone the repository
+git clone https://github.com/BlueDrink9/keeb_snakeskin.git
+cd keeb_snakeskin
+
+# Install in development mode with Python 3.13
+py -3.13 -m pip install -e .
+
+# Run with Python 3.13
+py -3.13 -m keeb_snakeskin.snakeskin --output_dir my_case preset_outlines/ferris.svg
+```
+
 ### Input File
 
 The program requires an SVG outline of the PCB, which is then used as the base shape for the case.
@@ -246,11 +277,22 @@ make configurator
 
 (Or run `python -m http.server 8771` from the repo root yourself.)
 
+On Windows, use:
+```powershell
+python -m http.server 8771
+# then open http://localhost:8771/configurator/
+```
+
 The configurator only writes the config file — it does not run the Python
 generator. Once you've downloaded `config.json`, run snakeskin as usual:
 
 ```sh
 snakeskin -c config.json -o my-board path/to/edge_cuts.svg
+```
+
+On Windows with Python 3.13:
+```powershell
+py -3.13 -m keeb_snakeskin.snakeskin -c config.json --output_dir my-board path/to/edge_cuts.svg
 ```
 
 The downloaded JSON contains only fields that differ from the defaults, so

@@ -35,6 +35,10 @@ def main():
         elif v is not None:
             param_overrides[k] = v
 
+    # Mark if output_dir was explicitly provided
+    if args.output_dir:
+        param_overrides["_output_dir_explicit"] = True
+
     input_file = Path(args.input_file).expanduser()
     if input_file.suffix == ".gm1":
         print(
@@ -92,7 +96,8 @@ def resolve_output_dir(output_path):
     if output_path.is_absolute():
         return output_path.expanduser().resolve()
     else:
-        return default_build_dir / output_path
+        # Relative paths are relative to current working directory
+        return Path.cwd() / output_path
 
 
 def gerber_to_svg(input_file):

@@ -121,9 +121,14 @@ def generate_cases(svg_file, user_params=None):
     base_face = import_svg_as_face(svg_file)
 
     def output_path(shape):
-        p = Path(cfg["output_dir"] / svg_file.stem / shape).with_suffix(
-            cfg["output_filetype"]
-        )
+        # If output_dir was explicitly set, use it directly without adding svg_file.stem
+        # Otherwise, add the stem as a subdirectory for organization
+        if cfg.get("_output_dir_explicit"):
+            output_base = cfg["output_dir"]
+        else:
+            output_base = cfg["output_dir"] / svg_file.stem
+        
+        p = Path(output_base / shape).with_suffix(cfg["output_filetype"])
         p.parent.mkdir(parents=True, exist_ok=True)
         return str(p)
 
